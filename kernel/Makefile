@@ -5,14 +5,14 @@ OBJECTS:=kernel.o boot.o
 all: homeaccounting.kernel
 
 homeaccounting.kernel: kernel.o boot.o linker.ld
-	i686-elf-gcc -T linker.ld -ffreestanding -O0 -nostdlib -lgcc -o $@ 
+	i686-elf-gcc -T linker.ld -ffreestanding -O0 -nostdlib -lgcc 
 	grub-file --is-x86-multiboot homeaccounting.kernel
 
 boot.o: boot.s 
 	i686-elf-as boot.s -o boot.o
 
 kernel.o: kernel.c include/multiboot.h
-	 i686-elf-gcc -c kernel.c -o kernel.o -Iinclude -std=gnu11 -ffreestanding -O0 -Wall -Wextra
+	 i686-elf-gcc -c kernel.c -o kernel.o -Iinclude -std=gnu99 -ffreestanding -O0 -Wall -Wextra
 
 clean:
 	rm -f homeaccounting.kernel

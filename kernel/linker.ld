@@ -9,7 +9,7 @@ INPUT
     boot.o
     kernel.o
 )
-OUTPUT(homeaccounting.bin)
+OUTPUT(homeaccounting.kernel)
 SECTIONS
 {
 	/* It used to be universally recommended to use 1M as a start offset,
