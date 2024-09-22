@@ -4,11 +4,6 @@ ENTRY(_start)
 
 /* Tell where the various sections of the object files will be put in the final
    kernel image. */
-INPUT
-(
-    boot.o
-    kernel.o
-)
 OUTPUT(homeaccounting.kernel)
 SECTIONS
 {

@@ -59,7 +59,6 @@ _start:
 	*/
 
 	mov $stack_top, %esp 
-
 	/*
 	This is a good place to initialize crucial processor state before the
 	high-level kernel is entered. It's best to minimize the early
@@ -68,7 +67,8 @@ _start:
 	point instructions and instruction set extensions are not initialized
 	yet. The GDT should be loaded here. Paging should be enabled here.
 	*/
-
+        
+        call _init
 	/*
 	Enter the high-level kernel. The ABI requires the stack is 16-byte
 	aligned at the time of the call instruction (which afterwards pushes
