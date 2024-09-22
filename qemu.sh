@@ -2,4 +2,4 @@
 set -e
 . ./iso.sh
 
-qemu-system-$(./target-triplet-to-arch.sh $HOST) -cdrom homeaccounting.iso
+qemu-system-i386 -cdrom homeaccounting.iso
