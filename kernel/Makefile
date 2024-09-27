@@ -1,20 +1,14 @@
 HOST=i686-elf
 HOSTARCH=i386
 
-CFLAGS?=-O2 -g
-
-PREFIX?=/usr/local
-EXEC_PREFIX?=$(PREFIX)
-BOOTDIR?=$(EXEC_PREFIX)/boot
-INCLUDEDIR?=$(PREFIX)/include
-
 CFLAGS:=$(CFLAGS) -ffreestanding -Wall -Wextra
-LDFLAGS:=$(LDFLAGS)
-LIBS:=$(LIBS) -nostdlib -lgcc
+CPPFLAGS:=$(CPPFLAGS) -D__is_kernel -Iinclude
+LIBS:=$(LIBS) -nostdlib -lk -lgcc
 
 KERNEL_OBJS=\
 boot.o \
 kernel.o \
+stack-smashing-protector.o \
 
 OBJS=\
 crti.o \
@@ -45,10 +39,10 @@ crtbegin.o crtend.o:
 	OBJ=`$(CC) $(CFLAGS) $(LDFLAGS) -print-file-name=$(@F)` && cp "$$OBJ" $@
 
 .c.o:
-	$(CC) -MD -c $< -o $@ -std=gnu11 $(CFLAGS)
+	$(CC) -MD -c $< -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS)
 
 .s.o:
-	$(CC) -MD -c $< -o $@ $(CFLAGS)
+	$(CC) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
 
 clean:
 	rm -f homeaccounting.kernel

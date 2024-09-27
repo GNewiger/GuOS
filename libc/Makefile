@@ -1,7 +1,11 @@
-OST=i686-elf
+HOST=i686-elf
 HOSTARCH=i386
 
 CFLAGS?=-O2 -g
+CFLAGS:=$(CFLAGS) -ffreestanding -Wall -Wextra
+CPPFLAGS:=$(CPPFLAGS) -Iinclude
+LIBK_CFLAGS:=$(CFLAGS)
+LIBK_CPPFLAGS:=$(CPPFLAGS) -D__is_libk
 
 PREFIX?=/usr/local
 EXEC_PREFIX?=$(PREFIX)
@@ -32,16 +36,16 @@ libk.a: $(LIBK_OBJS)
 	$(AR) rcs $@ $(LIBK_OBJS)
 
 .c.o:
-	$(CC) -MD -c $< -o $@ -std=gnu11 $(CFLAGS)
+	$(CC) -MD -c $< -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS)
 
 .s.o:
-	$(CC) -MD -c $< -o $@ $(CFLAGS)
+	$(CC) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
 
 .c.libk.o:
-	$(CC) -MD -c $< -o $@ -std=gnu11 $(CFLAGS)
+	$(CC) -MD -c $< -o $@ -std=gnu11 $(LIBK_CFLAGS) $(LIBK_CPPFLAGS)
 
 .s.libk.o:
-	$(CC) -MD -c $< -o $@ $(CFLAGS)	
+	$(CC) -MD -c $< -o $@ $(LIBK_CFLAGS) $(LIBK_CPPFLAGS)
 
 clean:
 	rm -f $(BINARIES) *.a
@@ -57,3 +61,6 @@ install-headers:
 install-libs: $(BINARIES)
 	mkdir -p $(DESTDIR)$(LIBDIR)
 	cp $(BINARIES) $(DESTDIR)$(LIBDIR)
+
+-include $(OBJS:.o=.d)
+-include $(LIBK_OBJS:.o=.d)
